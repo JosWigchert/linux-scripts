@@ -1,9 +1,7 @@
 #!/bin/bash
 
-# sudo airmon-ng check kill
-# sudo airmon-ng start wlx00c0cab1d64d
-
-ip link set wlx00c0cab1d64d down
-iw dev wlx00c0cab1d64d set type monitor
-ip link set wlx00c0cab1d64d up
+interface=wlx00c0cab1d64d
+sudo ip link set $interface down
+sudo iw dev $interface set type monitor
+sudo ip link set $interface up
 iw dev

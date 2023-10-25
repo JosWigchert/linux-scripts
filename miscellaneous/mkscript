@@ -1,0 +1,58 @@
+#!/bin/bash
+
+version="1.0"
+
+function help-text (){
+	echo "-v : Show version"
+	echo "-t : Type of script you want to create (bash/python3/...) defaults to bash"
+	echo "-h : Show help text"
+	exit 0;
+}
+
+args=("$@") 
+ELEMENTS=${#args[@]}
+
+if [[ $1 = "-h" ]]; then
+	help-tekst
+fi
+
+for (( i = 0; i < $ELEMENTS; i++ )); do
+	case ${args[${i}]} in
+		"-"* )
+			argument=${args[${i}]}
+			for (( j=1; j<${#argument}; j++ )); do
+			  	case "${argument:$j:1}" in
+			  		"v"  )
+						echo "Version: $version"
+						;;
+					"t"  )
+						fileType=${args[${i}+1]}
+						i=$i+1
+						;;
+					"h"  )
+						help-text;
+						exit 0;
+						;;
+					*	 )
+						echo "-${argument:$j:1}" "invalid command, use -h for more info"
+						;;
+				esac
+			done
+			;;
+		*	 )
+			fileName=${args[${i}]};
+			;;
+	esac
+done
+
+if [[ -z "$fileName" ]]; then
+	echo "No fileName was provided"
+else
+	if [[ -z "$fileType" ]]; then
+		printf "#!/bin/bash\n" > $fileName;
+		chmod +x $fileName;
+	else
+		printf "#!/bin/$fileType\n" > $fileName;
+		chmod +x $fileName;
+	fi
+fi
